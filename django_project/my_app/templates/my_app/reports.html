@@ -1,0 +1,24 @@
+{% extends "my_app/base.html" %}
+{% block title %}Reports | School management{% endblock %}
+{% block content %}
+    <div class="actions" style="justify-content: space-between; margin-bottom: 1rem;">
+        <h2>Attendance summary</h2>
+        <a class="button" href="{% url 'attendance-csv' %}">Download attendance CSV</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Class</th><th>Present</th><th>Absent</th><th>Late</th><th>Excused</th></tr></thead>
+            <tbody>
+                {% for summary in attendance_summaries %}
+                    <tr>
+                        <td>{{ summary.enrollment__school_class__name }}</td>
+                        <td>{{ summary.present }}</td>
+                        <td>{{ summary.absent }}</td>
+                        <td>{{ summary.late }}</td>
+                        <td>{{ summary.excused }}</td>
+                    </tr>
+                {% empty %}<tr><td colspan="5">No attendance data is available yet.</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
