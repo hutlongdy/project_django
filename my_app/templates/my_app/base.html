@@ -1,0 +1,117 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#172033">
+    <title>{% block title %}School Portal{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'my_app/site.css' %}">
+</head>
+<body>
+    {% if request.user.is_authenticated %}
+        <div class="app-shell">
+            <aside class="sidebar">
+                <a class="brand" href="{% url 'dashboard' %}">
+                    <span class="brand-mark" aria-hidden="true">
+                        <svg viewBox="0 0 32 32" fill="none">
+                            <path d="M4 12.5 16 6l12 6.5L16 19 4 12.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+                            <path d="M9 15.5v6c4.2 3.2 9.8 3.2 14 0v-6M28 13v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="brand-copy"><strong>Northstar</strong><small>School Portal</small></span>
+                </a>
+
+                <div class="nav-section-label">Workspace</div>
+                <nav class="side-nav" aria-label="Main navigation">
+                    <a class="nav-link{% if request.resolver_match.url_name == 'dashboard' %} active{% endif %}" href="{% url 'dashboard' %}">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>
+                        <span>Overview</span>
+                    </a>
+                    {% if school_role == "administrator" or school_role == "office_staff" %}
+                        <a class="nav-link{% if 'student-' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'student-list' %}">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M3 20v-1.5A4.5 4.5 0 0 1 7.5 14h3a4.5 4.5 0 0 1 4.5 4.5V20M16 5a3.5 3.5 0 0 1 0 6.8M18 14.5a4.5 4.5 0 0 1 3 4.3V20"/></svg>
+                            <span>Students</span>
+                        </a>
+                        <a class="nav-link{% if 'enrollment-' in request.resolver_match.url_name %} active{% endif %}" href="{% url 'enrollment-list' %}">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3.5h8l4 4V20a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2V5.5a2 2 0 0 1 2-2Z"/><path d="M14.5 3.5V8H19M8.5 12h7M8.5 16h7"/></svg>
+                            <span>Enrollments</span>
+                        </a>
+                    {% endif %}
+                </nav>
+
+                {% if school_role == "administrator" or school_role == "office_staff" or school_role == "teacher" %}
+                    <div class="nav-section-label nav-section-spaced">Learning</div>
+                    <nav class="side-nav" aria-label="Learning">
+                        <a class="nav-link{% if request.resolver_match.url_name == 'attendance' %} active{% endif %}" href="{% url 'attendance' %}">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16M8 15l2.2 2.2L16 12"/></svg>
+                            <span>Attendance</span>
+                        </a>
+                        <a class="nav-link{% if request.resolver_match.url_name == 'grades' %} active{% endif %}" href="{% url 'grades' %}">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+                            <span>Grades</span>
+                        </a>
+                    </nav>
+                {% endif %}
+
+                {% if school_role == "administrator" or school_role == "office_staff" %}
+                    <div class="nav-section-label nav-section-spaced">Insights</div>
+                    <nav class="side-nav" aria-label="Insights">
+                        <a class="nav-link{% if request.resolver_match.url_name == 'reports' or request.resolver_match.url_name == 'attendance-csv' %} active{% endif %}" href="{% url 'reports' %}">
+                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 20V9M12 20V4M19 20v-7M3 20.5h18"/></svg>
+                            <span>Reports</span>
+                        </a>
+                        {% if request.user.is_staff %}
+                            <a class="nav-link" href="/admin/">
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4L7.3 15a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1-.1 2Z"/></svg>
+                                <span>Administration</span>
+                            </a>
+                        {% endif %}
+                    </nav>
+                {% endif %}
+
+                <div class="sidebar-bottom">
+                    <div class="current-term">
+                        <span class="term-indicator"></span>
+                        <div><small>Academic year</small><strong>{{ current_year.name|default:"Not set" }}</strong></div>
+                    </div>
+                    <div class="profile-chip">
+                        <span class="avatar">{{ request.user.get_username|slice:":1"|upper }}</span>
+                        <div class="profile-copy">
+                            <strong>{{ request.user.get_full_name|default:request.user.get_username }}</strong>
+                            <small>{{ school_role|default:"Account" }}</small>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="workspace">
+                <header class="topbar">
+                    <div class="topbar-context"><span class="live-dot"></span>School operations</div>
+                    <div class="topbar-actions">
+                        <span class="topbar-user">{{ request.user.get_full_name|default:request.user.get_username }}</span>
+                        <form method="post" action="{% url 'logout' %}" class="inline-form">
+                            {% csrf_token %}<button class="sign-out" type="submit">Sign out <span aria-hidden="true">↗</span></button>
+                        </form>
+                    </div>
+                </header>
+                <main class="page-content">
+    {% else %}
+        <main class="auth-shell">
+    {% endif %}
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+            {% block content %}{% endblock %}
+    {% if request.user.is_authenticated %}
+                </main>
+                <footer class="workspace-footer"><span>Northstar School Portal</span><span>School management · Secure workspace</span></footer>
+            </div>
+        </div>
+    {% else %}
+        </main>
+    {% endif %}
+</body>
+</html>

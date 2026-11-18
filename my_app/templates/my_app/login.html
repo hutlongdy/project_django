@@ -1,0 +1,68 @@
+{% extends "my_app/base.html" %}
+{% load static %}
+{% block title %}Sign in | Northstar School Portal{% endblock %}
+{% block content %}
+    <section class="auth-card">
+        <div class="auth-hero">
+            <a class="brand auth-brand" href="{% url 'login' %}">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <path d="M4 12.5 16 6l12 6.5L16 19 4 12.5Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+                        <path d="M9 15.5v6c4.2 3.2 9.8 3.2 14 0v-6M28 13v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span class="brand-copy"><strong>Northstar</strong><small>School Portal</small></span>
+            </a>
+            <div class="auth-hero-copy">
+                <span class="banner-kicker">A BETTER SCHOOL DAY STARTS HERE</span>
+                <h1>Everything your school needs, in one place.</h1>
+                <p>Stay connected to your classes, student progress, attendance and school community.</p>
+            </div>
+            <div class="auth-illustration" aria-hidden="true">
+                <div class="auth-illustration-orbit"></div>
+                <div class="auth-illustration-book"><span></span><span></span></div>
+                <span class="auth-spark spark-a">✦</span><span class="auth-spark spark-b">✦</span>
+                <div class="auth-floating-note">
+                    <span class="auth-note-icon">✦</span>
+                    <span><small>A LITTLE PROGRESS, EVERY DAY</small><strong>Curiosity leads the way</strong></span>
+                </div>
+            </div>
+            <small class="auth-footer-copy">A thoughtful space for teaching and learning.</small>
+        </div>
+        <div class="auth-form-panel">
+            <div class="auth-form-heading">
+                <span class="auth-mobile-brand">NORTHSTAR SCHOOL PORTAL</span>
+                <h2>Welcome back</h2>
+                <p>Sign in to continue to your school workspace.</p>
+            </div>
+            <form method="post" class="auth-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+                <div class="auth-field">
+                    <label for="{{ form.username.id_for_label }}">Username</label>
+                    {{ form.username }}
+                    {% for error in form.username.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="auth-field">
+                    <label for="{{ form.password.id_for_label }}">Password</label>
+                    <div class="password-input-wrap">
+                        {{ form.password }}
+                        <button
+                            class="password-toggle"
+                            type="button"
+                            aria-controls="{{ form.password.id_for_label }}"
+                            aria-label="Show password"
+                            aria-pressed="false"
+                            data-password-toggle
+                        >Show</button>
+                    </div>
+                    {% for error in form.password.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+                <button class="button button-primary auth-submit" type="submit">Sign in <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="auth-help">Need access? Contact your school administrator.</p>
+        </div>
+    </section>
+    <script src="{% static 'my_app/password-toggle.js' %}" defer></script>
+{% endblock %}

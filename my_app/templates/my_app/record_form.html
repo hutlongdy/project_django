@@ -1,0 +1,15 @@
+{% extends "my_app/base.html" %}
+{% block title %}{{ title }} | School management{% endblock %}
+{% block content %}
+    <section class="panel">
+        <h2>{{ title }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="actions">
+                <button class="button" type="submit">Save</button>
+                <a class="button secondary" href="{% url 'dashboard' %}">Cancel</a>
+            </div>
+        </form>
+    </section>
+{% endblock %}
